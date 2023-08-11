@@ -1,0 +1,19 @@
+import smtplib
+def send_email(sender_email, sender_password, recipient_email, subject, body):
+  """Sends an email to the specified recipient."""
+  server = smtplib.SMTP("smtp.gmail.com", 587)
+  server.starttls()
+  server.login(sender_email, sender_password)
+  message = f"Subject: {subject}\n\n{body}"
+  server.sendmail(sender_email, recipient_email, message)
+  server.quit()
+def main():
+  """The main function."""
+  sender_email = "your_email@gmail.com"
+  sender_password = "your_password"
+  recipient_email = "recipient_email@company.com"
+  subject = "Your subject line"
+  body = "Your email body"
+  send_email(sender_email, sender_password, recipient_email, subject, body)
+if __name__ == "__main__":
+  main()
