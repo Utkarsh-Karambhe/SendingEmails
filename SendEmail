@@ -1,11 +1,18 @@
 import smtplib
-def send_email(sender_email, sender_password, recipient_email, subject, body):
-  """Sends an email to the specified recipient."""
+import os
+def send_email(sender_email, sender_password, recipient_email, subject, body, attachment_path=None):
+  """Sends an email to the specified recipient with an optional attachment."""
   server = smtplib.SMTP("smtp.gmail.com", 587)
   server.starttls()
   server.login(sender_email, sender_password)
   message = f"Subject: {subject}\n\n{body}"
-  server.sendmail(sender_email, recipient_email, message)
+  if attachment_path:
+    with open(attachment_path, "rb") as attachment:
+      attachment_content = attachment.read()
+      message += "\n\n--\n\nAttached: {}\n".format(os.path.basename(attachment_path))
+      server.sendmail(sender_email, recipient_email, message, attachment_content)
+  else:
+    server.sendmail(sender_email, recipient_email, message)
   server.quit()
 def main():
   """The main function."""
@@ -14,6 +21,11 @@ def main():
   recipient_email = "recipient_email@company.com"
   subject = "Your subject line"
   body = "Your email body"
-  send_email(sender_email, sender_password, recipient_email, subject, body)
+  attachment_path = "path_to_attachment"
+  send_email(sender_email, sender_password, recipient_email, subject, body, attachment_path)
 if __name__ == "__main__":
   main()
+
+//It can send an attachment with the email.
+//It can customize the features of the email based on the business requirement.
+
